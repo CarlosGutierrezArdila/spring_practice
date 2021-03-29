@@ -12,6 +12,10 @@ public class RomanNumberController {
 
     @GetMapping("/convert")
     public RomanNumber convertToRoman(@RequestParam(value = "number") Integer number){
-        return new RomanNumber(number);
+        try {
+            return new RomanNumber(number);
+        }catch (Exception e){
+            return  new RomanNumber(number, "Error: "+e.getMessage());
+        }
     }
 }
