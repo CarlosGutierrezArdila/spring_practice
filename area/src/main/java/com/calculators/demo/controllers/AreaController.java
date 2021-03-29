@@ -1,7 +1,7 @@
 package com.calculators.demo.controllers;
 
-import com.calculators.demo.dto.HouseDTO;
-import com.calculators.demo.dto.RoomDTO;
+import com.calculators.demo.dto.area.HouseDTO;
+import com.calculators.demo.dto.area.RoomDTO;
 import com.calculators.demo.services.HouseAreaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.calculators.demo.dto;
+package com.calculators.demo.dto.area;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
