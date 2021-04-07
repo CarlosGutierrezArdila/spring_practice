@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ArticleDTO {
 
+    private Integer productId;
     private String product;
     private String category;
     private String brand;
@@ -20,7 +21,8 @@ public class ArticleDTO {
     private String freeShipping;
     private String prestige;
 
-    public ArticleDTO(List<String> dataArray) {
+    public ArticleDTO(Integer id, List<String> dataArray) {
+        this.productId = id;
         this.product = dataArray.get(0);
         this.category = dataArray.get(1);
         this.brand = dataArray.get(2);

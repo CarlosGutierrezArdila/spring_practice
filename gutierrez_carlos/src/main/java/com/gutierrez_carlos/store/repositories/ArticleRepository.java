@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ArticleRepository {
     public List<ArticleDTO> listArticles();
+    public ArticleDTO getArticleById(Integer id);
 
 }

@@ -9,6 +9,6 @@ import java.util.List;
 public interface ArticleService {
 
     public List<ArticleDTO> listArticles();
-    public List<ArticleDTO> filterArticles(String product,String category,String brand,String price,String freeShipping,String prestige,Integer order) throws ArticleNotFoundException, FilterErrorException;
+    public List<ArticleDTO> filterArticles(String product,String category,String brand,String price,String freeShipping,String prestige,Integer order);
 
 }
