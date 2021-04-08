@@ -5,10 +5,13 @@ import com.gutierrez_carlos.store.exceptions.ArticleNotFoundException;
 import com.gutierrez_carlos.store.exceptions.FilterErrorException;
 import com.gutierrez_carlos.store.repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,70 +24,63 @@ public class ArticleServiceImp implements ArticleService {
         this.articleRepository = articleRepository;
     }
 
-    @Override
-    public List<ArticleDTO> listArticles() {
-        return articleRepository.listArticles();
-    }
-
-    @Override
-    public List<ArticleDTO> filterArticles(String product, String category, String brand, String price, String freeShipping, String prestige, Integer order) {
-        if (Arrays.asList(product, category, brand, price, freeShipping, prestige)
-                .stream().filter(key -> key != null)
-                .collect(Collectors.toList()).size() > 2) {
-            throw new FilterErrorException("Error al aplicar filtros maximo 2 filtros permitidos");
-        }
-        List<ArticleDTO> response = articleRepository.listArticles().stream()
-                .filter(articleDTO -> {
-                    Boolean result=false;
-                        result = this.applyFilters(articleDTO, product, category, brand, price, freeShipping, prestige);
-
-                    return result;
-                })
-                .collect(Collectors.toList());
-        if (response.size() == 0)
-            throw new ArticleNotFoundException("No se encontraron productos para el filtro especificado");
-        if (order != null)
-            response = order(response, order);
-        return response;
-    }
-
-    public List<ArticleDTO> order(List<ArticleDTO> list, Integer orderParam)  {
+    /**
+     * perform a stream sorting of an article list
+     * @param list unordered list
+     * @param orderParam order criteria
+     * @return ordered list
+     */
+    public List<ArticleDTO> order(List<ArticleDTO> list, String orderParam)  {
         Stream<ArticleDTO> s = list.stream();
         switch (orderParam) {
-            case 0:
+            case "0":
                 return s.sorted((a1, a2) -> a1.getProduct().compareTo(a2.getProduct())).collect(Collectors.toList());
-            case 1:
+            case "1":
                 return s.sorted((a1, a2) -> a2.getProduct().compareTo(a1.getProduct())).collect(Collectors.toList());
-            case 2:
+            case "2":
                 return s.sorted((a1, a2) -> a1.calculateDoublePrice().compareTo(a2.calculateDoublePrice())).collect(Collectors.toList());
-            case 3:
+            case "3":
                 return s.sorted((a1, a2) -> a2.calculateDoublePrice().compareTo(a1.calculateDoublePrice())).collect(Collectors.toList());
             default:
                 throw new FilterErrorException("Error al aplicar filtros, Parametro de ordenamiento invalido");
         }
     }
 
-
-    public Boolean applyFilters(ArticleDTO target, String product, String category, String brand, String price, String freeShipping, String prestige) {
-        Boolean result = true;
-        try {
-            if (product != null)
-                result = result & target.getProduct().equals(product);
-            if (category != null)
-                result = result & target.getCategory().equals(category);
-            if (brand != null)
-                result = result & target.getBrand().equals(brand);
-            if (price != null)
-                result = result & Double.parseDouble(price.replaceAll("[^\\d]",""))==(target.calculateDoublePrice());
-            if (freeShipping != null)
-                result = result & target.getFreeShipping().equals(freeShipping);
-            if (prestige != null)
-                result = result & target.getPrestige().equals(prestige);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new FilterErrorException("Error al aplicar filtros valores incorrectos");
+    /**
+     * Method to get the article list and perform the filters specified by the user
+     * @param query map of pre validated filters to apply
+     * @return
+     */
+    @Override
+    public List<ArticleDTO> filterArticles(Map<String,String> query){
+        List<ArticleDTO> wholeList = articleRepository.listArticles();
+        for (String filter:query.keySet()) {
+            if(filter.equals("order"))
+                continue;
+            wholeList = wholeList
+                    .stream()
+                    .filter(articleDTO -> {
+                        try {
+                            Method getter = articleDTO.getClass().getMethod("get"+filter.substring(0, 1).toUpperCase() + filter.substring(1));
+                            if(filter.equals("price"))
+                                return String.valueOf(getter.invoke(articleDTO,null)).replaceAll("[^\\d]", "") .equals(query.get(filter));
+                            return String.valueOf(getter.invoke(articleDTO,null)).toUpperCase().equals(query.get(filter).toUpperCase());
+                        } catch (NoSuchMethodException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    })
+                    .collect(Collectors.toList());
         }
-        return result;
+        if (query.containsKey("order"))
+            wholeList=order(wholeList,query.get("order"));
+        if(wholeList.size()==0)
+            throw new ArticleNotFoundException("No se encontraron articulos para los filtros especificados", HttpStatus.OK);
+        return wholeList;
     }
 
 }

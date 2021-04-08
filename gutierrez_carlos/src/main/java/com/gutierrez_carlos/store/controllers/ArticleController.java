@@ -1,14 +1,13 @@
 package com.gutierrez_carlos.store.controllers;
-
-import com.gutierrez_carlos.store.exceptions.ArticleNotFoundException;
-import com.gutierrez_carlos.store.exceptions.FilterErrorException;
 import com.gutierrez_carlos.store.services.ArticleService;
+import com.gutierrez_carlos.store.utils.ValidateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 public class ArticleController {
@@ -20,20 +19,15 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
+    /**
+     * Endpoint responsible for articles filtering and listing, as well as input validation
+     * @param query Map of query params provided for the request
+     * @return
+     */
     @GetMapping("/articles")
-    public ResponseEntity listArticles(
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) String product,
-            @RequestParam(required = false) String brand,
-            @RequestParam(required = false) String price,
-            @RequestParam(required = false) String freeShipping,
-            @RequestParam(required = false) String prestige,
-            @RequestParam(required = false) Integer order) throws ArticleNotFoundException, FilterErrorException {
-        if (category != null || product != null || brand != null || price != null || freeShipping != null || prestige != null)
-            return new ResponseEntity(this.articleService.filterArticles(product, category, brand, price, freeShipping, prestige, order), HttpStatus.OK);
-        else
-            return new ResponseEntity(this.articleService.listArticles(), HttpStatus.OK);
-
+    public ResponseEntity listArticles(@RequestParam Map<String,String> query){
+        ValidateUtils.articleQueryValidator(query);
+        return ResponseEntity.ok().body(articleService.filterArticles(query));
     }
 
 

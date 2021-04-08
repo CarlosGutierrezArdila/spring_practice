@@ -19,6 +19,11 @@ public class PurchaseServiceImp implements PurchaseService{
     }
 
 
+    /**
+     * Processes a purchase request verifying the current product stock
+     * @param request
+     * @return
+     */
     @Override
     public PurchaseResponseDTO processPurchase(PurchaseRequestDTO request) {
         int total = 0;
@@ -31,6 +36,7 @@ public class PurchaseServiceImp implements PurchaseService{
             response.getTicket().getArticles().add(item);
             if (item.getQuantity()>article.getQuantity())
                 throw new InsuficientStockException("La cantidad de producto con id "+item.getProductId()+" supera la cantidad del stock");
+            article.setQuantity(article.getQuantity()-item.getQuantity());
             total+=article.calculateDoublePrice()*item.getQuantity();
             response.getTicket().setTotal((int) total);
         }

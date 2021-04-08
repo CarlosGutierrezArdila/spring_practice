@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class GlobalControllerAdvice {
     @ExceptionHandler(ArticleNotFoundException.class)
     public ResponseEntity articleNotFoundHandler(ArticleNotFoundException e){
-        return new ResponseEntity(new ErrorDTO(e.getMessage()), HttpStatus.OK);
+        return new ResponseEntity(new ErrorDTO(e.getMessage()), e.getStatus());
     }
 
     @ExceptionHandler(DataLoadException.class)

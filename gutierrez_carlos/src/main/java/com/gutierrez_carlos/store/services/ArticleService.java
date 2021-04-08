@@ -5,10 +5,10 @@ import com.gutierrez_carlos.store.exceptions.ArticleNotFoundException;
 import com.gutierrez_carlos.store.exceptions.FilterErrorException;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ArticleService {
 
-    public List<ArticleDTO> listArticles();
-    public List<ArticleDTO> filterArticles(String product,String category,String brand,String price,String freeShipping,String prestige,Integer order);
+    public List<ArticleDTO> filterArticles(Map<String,String> query);
 
 }

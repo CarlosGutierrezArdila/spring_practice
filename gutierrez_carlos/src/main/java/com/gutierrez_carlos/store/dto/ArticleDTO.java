@@ -21,6 +21,11 @@ public class ArticleDTO {
     private String freeShipping;
     private String prestige;
 
+    /**
+     * create new product from a string list matching a csv entry
+     * @param id
+     * @param dataArray
+     */
     public ArticleDTO(Integer id, List<String> dataArray) {
         this.productId = id;
         this.product = dataArray.get(0);
@@ -32,8 +37,12 @@ public class ArticleDTO {
         this.prestige = dataArray.get(6);
     }
 
+    /**
+     * obtain numeric value of price to make calculations
+     * @return
+     */
     public Double calculateDoublePrice(){
-        return Double.parseDouble(getPrice().replace("$", "").replace(".", ""));
+        return Double.parseDouble(getPrice().replaceAll("[^\\d]", ""));
     }
 
     public Boolean calculateBooleanFreeShipping(){
