@@ -22,5 +22,4 @@ public class PurchaseController {
     public ResponseEntity requestPurchase(@RequestBody PurchaseRequestDTO request){
         return ResponseEntity.status(200).body(purchaseService.processPurchase(request));
     }
-
 }

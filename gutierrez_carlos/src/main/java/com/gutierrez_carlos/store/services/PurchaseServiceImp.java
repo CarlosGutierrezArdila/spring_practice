@@ -29,15 +29,15 @@ public class PurchaseServiceImp implements PurchaseService{
         int total = 0;
         PurchaseResponseDTO response = new PurchaseResponseDTO();
         response.setTicket(new TicketDTO(1, new ArrayList<PurchaseProductDTO>(), 0));
-        for (PurchaseProductDTO item:request.getArticles()) {
+        for (PurchaseProductDTO item : request.getArticles()) {
             ArticleDTO article = articleRepository.getArticleById(item.getProductId());
             item.setName(article.getProduct());
             item.setBrand(article.getBrand());
             response.getTicket().getArticles().add(item);
-            if (item.getQuantity()>article.getQuantity())
-                throw new InsuficientStockException("La cantidad de producto con id "+item.getProductId()+" supera la cantidad del stock");
-            article.setQuantity(article.getQuantity()-item.getQuantity());
-            total+=article.calculateDoublePrice()*item.getQuantity();
+            if (item.getQuantity() > article.getQuantity())
+                throw new InsuficientStockException("La cantidad de producto con id " + item.getProductId() + " supera la cantidad del stock");
+            article.setQuantity(article.getQuantity() - item.getQuantity());
+            total += article.calculateDoublePrice() * item.getQuantity();
             response.getTicket().setTotal((int) total);
         }
         response.setStatusCode(new MessageDTO(200, "Compra exitosa"));
