@@ -35,7 +35,7 @@ public class HouseAreaService {
     public static RoomDTO biggestRoom(HouseDTO house) {
         RoomDTO biggestRoom = null;
         if (house.getHabitaciones() != null) {
-            if(house.getHabitaciones().size()>0) biggestRoom = house.getHabitaciones().get(0);
+            if (house.getHabitaciones().size() > 0) biggestRoom = house.getHabitaciones().get(0);
             for (RoomDTO room : house.getHabitaciones()) {
                 if (room.calculateArea() > biggestRoom.calculateArea()) {
                     biggestRoom = room;

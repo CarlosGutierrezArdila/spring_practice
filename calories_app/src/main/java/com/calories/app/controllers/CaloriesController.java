@@ -24,7 +24,7 @@ public class CaloriesController {
     }
 
     @PostMapping("/calculateSingleDish")
-    public ResponseEntity<ResponseDTO> calculateSingleDish(@RequestBody DishDTO dish){
+    public ResponseEntity<ResponseDTO> calculateSingleDish(@RequestBody DishDTO dish) {
         return new ResponseEntity<ResponseDTO>(this.ingredientService.calculateCalories(dish), HttpStatus.OK);
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/diploma")
 public class DiplomaController {
     @PostMapping("/generateDiploma")
-    public ResponseEntity generateDiploma(@RequestBody StudentDTO student){
+    public ResponseEntity generateDiploma(@RequestBody StudentDTO student) {
         return new ResponseEntity(StudentService.generateDiploma(student), HttpStatus.OK);
     }
 }

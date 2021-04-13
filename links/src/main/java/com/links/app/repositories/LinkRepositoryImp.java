@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class LinkRepositoryImp implements LinkRepository{
+public class LinkRepositoryImp implements LinkRepository {
     private Map<LinkDTO, Integer> linkRepository = new HashMap<LinkDTO, Integer>();
     private AtomicLong linkId = new AtomicLong(0);
 
@@ -20,8 +20,7 @@ public class LinkRepositoryImp implements LinkRepository{
             linkDTO = new LinkDTO(linkId.incrementAndGet(), url, password);
 
             linkRepository.put(linkDTO, 0);
-        }
-        else {
+        } else {
             linkDTO = getLinkByUrl(url);
         }
 

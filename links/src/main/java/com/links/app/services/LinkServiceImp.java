@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URL;
 
-public class LinkServiceImp implements LinkService{
+public class LinkServiceImp implements LinkService {
     @Autowired
     private LinkRepository linkRepository;
 
@@ -21,8 +21,7 @@ public class LinkServiceImp implements LinkService{
             new URL(url).toURI();
 
             return linkRepository.createLink(url, password);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new InvalidLinkException("El link ingresado es inválido");
         }
     }

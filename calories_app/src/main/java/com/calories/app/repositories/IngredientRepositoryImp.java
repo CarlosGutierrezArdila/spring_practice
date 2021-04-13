@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class IngredientRepositoryImp implements IngredientRepository{
+public class IngredientRepositoryImp implements IngredientRepository {
     @Override
     public List<IngredientInfo> getIngredients() {
         List<IngredientInfo> ingredients = null;
@@ -32,7 +32,8 @@ public class IngredientRepositoryImp implements IngredientRepository{
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
-        TypeReference<List<IngredientInfo>> typeRef = new TypeReference<>() {};
+        TypeReference<List<IngredientInfo>> typeRef = new TypeReference<>() {
+        };
 
         List<IngredientInfo> ingredients = null;
 

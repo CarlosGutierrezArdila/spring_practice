@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IngredientRepository {
 
-    public List<IngredientInfo> getIngredients() ;
+    public List<IngredientInfo> getIngredients();
 
 
 }

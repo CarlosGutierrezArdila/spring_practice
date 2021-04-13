@@ -1,2 +1,25 @@
-package com.starwars.app.dto;public class CharacterDTO {
+package com.starwars.app.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Collection;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class CharacterDTO {
+
+    private String name;
+    private String height;
+    private String mass;
+    private String hair_color;
+    private String skin_color;
+    private String eye_color;
+    private String birth_year;
+    private String gender;
+    private String homeworld;
+    private String species;
+
 }

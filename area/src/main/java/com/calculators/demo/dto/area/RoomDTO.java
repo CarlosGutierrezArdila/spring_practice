@@ -10,7 +10,7 @@ public class RoomDTO {
     private Double ancho;
     private Double largo;
 
-    public Double calculateArea(){
-        return this.ancho*this.largo;
+    public Double calculateArea() {
+        return this.ancho * this.largo;
     }
 }

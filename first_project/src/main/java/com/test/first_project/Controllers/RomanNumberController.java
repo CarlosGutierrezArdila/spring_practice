@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class RomanNumberController {
 
     @GetMapping("/convert")
-    public RomanNumber convertToRoman(@RequestParam(value = "number") Integer number){
+    public RomanNumber convertToRoman(@RequestParam(value = "number") Integer number) {
         try {
             return new RomanNumber(number);
-        }catch (Exception e){
-            return  new RomanNumber(number, "Error: "+e.getMessage());
+        } catch (Exception e) {
+            return new RomanNumber(number, "Error: " + e.getMessage());
         }
     }
 }

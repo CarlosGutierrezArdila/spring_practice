@@ -9,8 +9,11 @@ import com.links.app.exceptions.LinkNotFoundException;
 
 public interface LinkService {
     LinkDTO createLink(String url, String password) throws InvalidLinkException;
+
     LinkDTO getLink(Long linkId, String password) throws LinkNotFoundException, InvalidPasswordException;
+
     MetricsDTO getMetrics(Long linkId) throws LinkNotFoundException;
+
     InvalidateDTO invalidateLink(Long linkId) throws LinkNotFoundException;
 
 }
