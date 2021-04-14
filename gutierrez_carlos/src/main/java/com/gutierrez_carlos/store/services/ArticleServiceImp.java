@@ -65,11 +65,7 @@ public class ArticleServiceImp implements ArticleService {
                             if(filter.equals("price"))
                                 return String.valueOf(getter.invoke(articleDTO,null)).replaceAll("[^\\d]", "") .equals(query.get(filter));
                             return String.valueOf(getter.invoke(articleDTO,null)).toUpperCase().equals(query.get(filter).toUpperCase());
-                        } catch (NoSuchMethodException e) {
-                            e.printStackTrace();
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         return false;

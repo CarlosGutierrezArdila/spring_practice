@@ -20,7 +20,12 @@ public class ArticleDTOFixture {
     }
 
     public static List<ArticleDTO> get4(){
-        return new ArrayList<>(Arrays.asList(getOne(),getOne(),getOne(),getOne()));
+        return new ArrayList<>(Arrays.asList(
+                getOne(),
+                new ArticleDTO(2,"test2","herramientas","test","$50.000",4,"SI","***"),
+                new ArticleDTO(3,"test3","herramientas","test","$30.000",4,"SI","***"),
+                new ArticleDTO(4,"test4","test","test","$30.000",4,"SI","***")
+                ));
     }
 
 }
