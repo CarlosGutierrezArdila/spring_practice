@@ -12,6 +12,11 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity articleNotFoundHandler(ApiException e){
-        return ResponseEntity.status(e.getStatusCode()).body(e.getDescription());
+        return ResponseEntity.status(e.getStatusCode()).body(new ApiError(e));
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity oops(RuntimeException e){
+        return ResponseEntity.status(500).body(new ApiError("A000", "tenemos problemas para procesar la solicitud", 500));
     }
 }

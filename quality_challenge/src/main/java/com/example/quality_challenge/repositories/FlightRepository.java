@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface FlightRepository {
     List<FlightDTO> getFlights();
+    boolean destinationExists(String name);
+    boolean originExists(String name);
 }

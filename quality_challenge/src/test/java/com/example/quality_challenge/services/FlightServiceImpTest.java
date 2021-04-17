@@ -1,6 +1,8 @@
 package com.example.quality_challenge.services;
 
+import com.example.quality_challenge.Exceptions.ApiException;
 import com.example.quality_challenge.dto.FlightDTO;
+import com.example.quality_challenge.dto.FlightDTOFixture;
 import com.example.quality_challenge.repositories.FlightRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,19 +36,38 @@ class FlightServiceImpTest {
     @BeforeEach
     void setUp() {
         flightService = new FlightServiceImp(flightRepositoryMock);
-        when(flightRepositoryMock.getFlights()).thenReturn(new ArrayList<>());
+        when(flightRepositoryMock.getFlights()).thenReturn(FlightDTOFixture.completeFlightsList());
     }
 
     @ParameterizedTest
     @MethodSource("provideMapsToFilter")
     void filterFlights(Map<String,String> query, Integer quantity) {
         List<FlightDTO> flightDTOS = flightService.filterFlights(query);
-        assertEquals(flightDTOS.size(),quantity);
+        assertEquals(quantity,flightDTOS.size());
     }
 
     List<Arguments> provideMapsToFilter(){
         return Arrays.asList(
-                Arguments.of(Map.of(), 0)
+                Arguments.of(Map.of(), 3),
+                Arguments.of(Map.of("seatType","Economy"), 2),
+                Arguments.of(Map.of("destination","Puerto Iguazú"), 1),
+                Arguments.of(Map.of("dateFrom","02/02/2021"), 3),
+                Arguments.of(Map.of("dateTo","15/02/2021"), 1)
+        );
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("provideMapsToFilterException")
+    void filterFlightsException(Map<String,String> query) {
+        assertThrows(Exception.class, ()-> flightService.filterFlights(query));
+    }
+
+
+    List<Arguments> provideMapsToFilterException(){
+        return Arrays.asList(
+                Arguments.of(Map.of("destination","Puerto null")),
+                Arguments.of(Map.of("origin","none"))
         );
     }
 
