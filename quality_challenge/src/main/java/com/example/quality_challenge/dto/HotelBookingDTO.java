@@ -9,14 +9,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FlightBookingDTO {
+public class HotelBookingDTO {
     private String dateFrom;
     private String dateTo;
-    private String origin;
     private String destination;
-    private String flightNumber;
-    private Integer seats;
-    private String seatType;
+    private String hotelCode;
+    private Integer peopleAmount;
+    private String roomType;
     private List<PersonDTO> people;
     private PaymentMethodDTO paymentMethod;
 }

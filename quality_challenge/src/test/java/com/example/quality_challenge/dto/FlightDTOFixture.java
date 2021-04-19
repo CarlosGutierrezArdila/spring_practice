@@ -49,5 +49,19 @@ public class FlightDTOFixture {
         }
     }
 
+    public static FlightDTO oneFlight(){
+        return new FlightDTO(
+                "PIBA-1420",
+                "Puerto Iguazú",
+                "Bogotá",
+                "Economy",
+                "10000",
+                "10/02/2021",
+                "20/02/2021"
+        );
+    }
+
+
+
 
 }

@@ -1,19 +1,13 @@
 package com.example.quality_challenge.services;
 
 import com.example.quality_challenge.Exceptions.ApiException;
-import com.example.quality_challenge.Exceptions.ExceptionFactory;
-import com.example.quality_challenge.dto.FlightDTO;
+import com.example.quality_challenge.dto.*;
 import com.example.quality_challenge.repositories.FlightRepository;
 import com.example.quality_challenge.utils.DateUtils;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -56,4 +50,47 @@ public class FlightServiceImp implements FlightService{
             throw new ApiException("F001","There is no flight matching the provided filters.",200);
         return wholeList;
     }
+
+    @Override
+    public BookedFlightDTO bookFlight(FlightReservationDTO flightRequest) {
+        FlightBookingDTO flight = flightRequest.getBooking();
+        FlightDTO bookedFlight = flightRepository.getFlightByID(flight.getFlightNumber(), flight.getOrigin(),flight.getDestination());
+        Double fee = calculatePrice(bookedFlight, flight.getPeople().size());
+        Double interest = calculateInterest(flight.getPaymentMethod().getDues());
+        return new BookedFlightDTO(
+                flightRequest.getUserName(),
+                fee,
+                interest,
+                fee*(1.0+(interest/100.0)),
+                new FlightBookingResponseDTO(
+                        bookedFlight.getDateFrom(),
+                        bookedFlight.getDateTo(),
+                        bookedFlight.getOrigin(),
+                        bookedFlight.getDestination(),
+                        bookedFlight.getFlightNumber(),
+                        flight.getSeats(),
+                        flight.getSeatType(),
+                        flight.getPeople(),
+                        new MessageDTO(200,"Flight booked successfully")
+                )
+
+        );
+    }
+
+    public Double calculatePrice(FlightDTO flight , Integer people){
+        return Double.parseDouble(flight.getPrice())*people;
+    }
+
+    public Double calculateInterest(Integer dues){
+        if(dues==1)
+            return 0.0;
+        if(dues>1 && dues <4)
+            return 5.0;
+        if(dues>3)
+            return 10.0;
+        else
+            return 0.0;
+    }
+
+
 }

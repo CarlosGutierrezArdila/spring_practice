@@ -8,4 +8,5 @@ public interface FlightRepository {
     List<FlightDTO> getFlights();
     boolean destinationExists(String name);
     boolean originExists(String name);
+    FlightDTO getFlightByID(String id, String origin, String destination);
 }

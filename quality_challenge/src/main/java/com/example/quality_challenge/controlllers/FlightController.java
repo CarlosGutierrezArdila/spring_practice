@@ -27,6 +27,6 @@ public class FlightController {
 
     @PostMapping("/flight-reservation")
     public ResponseEntity bookFlight(@RequestBody FlightReservationDTO reservation){
-        return ResponseEntity.ok().body(reservation);
+        return ResponseEntity.ok().body(flightService.bookFlight(reservation));
     }
 }
