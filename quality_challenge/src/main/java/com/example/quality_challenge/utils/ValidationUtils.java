@@ -2,9 +2,12 @@ package com.example.quality_challenge.utils;
 
 import com.example.quality_challenge.Exceptions.ApiException;
 import com.example.quality_challenge.Exceptions.ExceptionFactory;
+import com.example.quality_challenge.dto.FlightReservationDTO;
+import com.example.quality_challenge.dto.HotelReservationDTO;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class ValidationUtils {
 
@@ -28,4 +31,34 @@ public class ValidationUtils {
             if(DateUtils.beforeEnd(query.get("dateFrom"),query.get("dateTo")))
                 throw new ApiException("H005","The final date must be after the starting date.",400);
     }
+
+    public static void validateEmail(String email){
+        if (!Pattern.compile("^(.+)@(.+)$").matcher(email).matches())
+            throw new ApiException("A006", "Invalid email, please provide a valid email", 400);
+
+    }
+
+    public static void validateBookFlightInput(FlightReservationDTO reservation){
+        validateEmail(reservation.getUserName());
+        DateUtils.validateDate(reservation.getBooking().getDateFrom());
+        DateUtils.validateDate(reservation.getBooking().getDateTo());
+        if(DateUtils.beforeEnd(reservation.getBooking().getDateFrom(),reservation.getBooking().getDateTo()))
+            throw new ApiException("H005","The final date must be after the starting date.",400);
+        if(reservation.getBooking().getPeople().size()!=reservation.getBooking().getSeats())
+            throw new ApiException("F008","The specified number of seats does not match the number of people",400);
+        if(reservation.getBooking().getPaymentMethod().getType().equalsIgnoreCase("DEBIT")&&reservation.getBooking().getPaymentMethod().getDues()!=1)
+            throw new ApiException("F009","The specified payment method is debit and must have 1 due",400);
+
+    }
+
+    public static void validateBookHotelInput(HotelReservationDTO reservation){
+        validateEmail(reservation.getUserName());
+        DateUtils.validateDate(reservation.getBooking().getDateFrom());
+        DateUtils.validateDate(reservation.getBooking().getDateTo());
+        if(DateUtils.beforeEnd(reservation.getBooking().getDateFrom(),reservation.getBooking().getDateTo()))
+            throw new ApiException("H005","The final date must be after the starting date.",400);
+        if(reservation.getBooking().getPaymentMethod().getType().equalsIgnoreCase("DEBIT")&&reservation.getBooking().getPaymentMethod().getDues()!=1)
+            throw new ApiException("F009","The specified payment method is debit and must have 1 due",400);
+    }
+
 }

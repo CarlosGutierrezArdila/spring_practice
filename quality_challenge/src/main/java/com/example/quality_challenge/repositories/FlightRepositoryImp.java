@@ -27,6 +27,13 @@ public class FlightRepositoryImp implements FlightRepository{
         originCities = flights.stream().map((flightDTO)-> flightDTO.getOrigin() ).collect(Collectors.toList());
     }
 
+    public FlightRepositoryImp(String filePath) {
+        this.filePath = filePath!=null ? filePath : "src/main/resources/dbFlights.json";
+        flights = loadDatabase();
+        destinationCities = flights.stream().map((flightDTO)-> flightDTO.getDestination() ).collect(Collectors.toList());
+        originCities = flights.stream().map((flightDTO)-> flightDTO.getOrigin() ).collect(Collectors.toList());
+    }
+
     public List<FlightDTO> loadDatabase(){
         ObjectMapper objectMapper = new ObjectMapper();
         List<FlightDTO> flights = new ArrayList<>();
@@ -34,7 +41,7 @@ public class FlightRepositoryImp implements FlightRepository{
             flights = objectMapper.readValue(new File(filePath), new TypeReference<List<FlightDTO>>() {
             });
         } catch (Exception e){
-            e.printStackTrace();
+            throw new ApiException("A002","Failed to load BD", 500);
         }
         return flights;
     }

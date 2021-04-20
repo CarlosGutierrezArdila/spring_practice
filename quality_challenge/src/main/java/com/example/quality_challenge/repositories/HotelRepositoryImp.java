@@ -5,6 +5,7 @@ import com.example.quality_challenge.dto.FlightDTO;
 import com.example.quality_challenge.dto.HotelDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
+@Data
 public class HotelRepositoryImp implements HotelRepository{
 
     private String filePath = "src/main/resources/dbHotels.json";
@@ -22,7 +24,10 @@ public class HotelRepositoryImp implements HotelRepository{
     public HotelRepositoryImp() {
         hotels = loadDatabase();
         cities = hotels.stream().map((hotelDTO)-> hotelDTO.getCity() ).collect(Collectors.toList());
+    }
 
+    public HotelRepositoryImp(String filePath) {
+        this.filePath = filePath;
     }
 
     @Override
@@ -53,7 +58,7 @@ public class HotelRepositoryImp implements HotelRepository{
             hotels = objectMapper.readValue(new File(filePath), new TypeReference<List<HotelDTO>>() {
             });
         } catch (Exception e){
-            e.printStackTrace();
+            throw new ApiException("A002","Failed to load BD", 500);
         }
         return hotels;
     }

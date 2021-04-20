@@ -1,0 +1,20 @@
+[
+  {
+    "flightNumber": "BAPI-1235",
+    "origin": "Buenos Aires",
+    "destination": "Puerto Iguazú",
+    "seatType": "Economy",
+    "price": 6500,
+    "dateFrom": "10/02/2021",
+    "dateTo": "15/02/2021"
+  },
+  {
+    "flightNumber": "PIBA-1420",
+    "origin": "Puerto Iguazú",
+    "destination": "Bogotá",
+    "seatType": "Business",
+    "price": 43200,
+    "dateFrom": "10/02/2021",
+    "dateTo": "20/02/2021"
+  }
+  ]

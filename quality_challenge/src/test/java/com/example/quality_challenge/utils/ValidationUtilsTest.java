@@ -1,6 +1,10 @@
 package com.example.quality_challenge.utils;
 
 import com.example.quality_challenge.Exceptions.ApiException;
+import com.example.quality_challenge.dto.FlightDTOFixture;
+import com.example.quality_challenge.dto.FlightReservationDTO;
+import com.example.quality_challenge.dto.HotelDTOFixture;
+import com.example.quality_challenge.dto.HotelReservationDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -8,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -61,4 +66,27 @@ class ValidationUtilsTest {
         );
     }
 
+    @ParameterizedTest
+    @ValueSource(strings={"abs@hds.com","kajflkasdj32@gmail.com.co", "mail.lkdslsld@edu.co"})
+    void validateEmail(String email) {
+        assertDoesNotThrow(()->ValidationUtils.validateEmail(email));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings={"abshds.com@","@gmail.com.co", "mail.lkdslsld#edu.co"})
+    void validateEmailFail(String email) {
+        assertThrows(ApiException.class,()->ValidationUtils.validateEmail(email));
+    }
+
+    @Test
+    void validateBookFlightInput() {
+        FlightReservationDTO test = FlightDTOFixture.bookInput();
+        assertDoesNotThrow( ()-> ValidationUtils.validateBookFlightInput(test));
+    }
+
+    @Test
+    void validateBookHotelInput() {
+        HotelReservationDTO test = HotelDTOFixture.bookingInput();
+        assertDoesNotThrow(()-> ValidationUtils.validateBookHotelInput(test));
+    }
 }
