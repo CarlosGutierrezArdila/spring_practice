@@ -1,6 +1,7 @@
 package com.example.quality_challenge.services;
 
 import com.example.quality_challenge.Exceptions.ApiException;
+import com.example.quality_challenge.dto.BookedFlightDTO;
 import com.example.quality_challenge.dto.FlightDTO;
 import com.example.quality_challenge.dto.FlightDTOFixture;
 import com.example.quality_challenge.repositories.FlightRepository;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,12 +38,12 @@ class FlightServiceImpTest {
     @BeforeEach
     void setUp() {
         flightService = new FlightServiceImp(flightRepositoryMock);
-        when(flightRepositoryMock.getFlights()).thenReturn(FlightDTOFixture.completeFlightsList());
     }
 
     @ParameterizedTest
     @MethodSource("provideMapsToFilter")
     void filterFlights(Map<String,String> query, Integer quantity) {
+        when(flightRepositoryMock.getFlights()).thenReturn(FlightDTOFixture.completeFlightsList());
         List<FlightDTO> flightDTOS = flightService.filterFlights(query);
         assertEquals(quantity,flightDTOS.size());
     }
@@ -72,4 +74,12 @@ class FlightServiceImpTest {
     }
 
 
+    @Test
+    void bookFlight() {
+        when(flightRepositoryMock.getFlightByID(any(),any(),any())).thenReturn(FlightDTOFixture.oneFlight());
+        BookedFlightDTO result = flightService.bookFlight(FlightDTOFixture.bookInput());
+        assertEquals(21000.0, result.getTotal());
+        assertEquals(5.0, result.getInterest());
+
+    }
 }

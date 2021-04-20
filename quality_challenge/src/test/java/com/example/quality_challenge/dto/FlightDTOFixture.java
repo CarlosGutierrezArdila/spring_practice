@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FlightDTOFixture {
@@ -39,9 +41,10 @@ public class FlightDTOFixture {
                 "      }\n" +
                 "]";
     }
-    public static List<FlightDTO> completeFlightsList(){
+
+    public static List<FlightDTO> completeFlightsList() {
         try {
-            return  new ObjectMapper().readValue(completeFlightsListJson(), new TypeReference<List<FlightDTO>>() {
+            return new ObjectMapper().readValue(completeFlightsListJson(), new TypeReference<List<FlightDTO>>() {
             });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -49,7 +52,7 @@ public class FlightDTOFixture {
         }
     }
 
-    public static FlightDTO oneFlight(){
+    public static FlightDTO oneFlight() {
         return new FlightDTO(
                 "PIBA-1420",
                 "Puerto Iguazú",
@@ -61,7 +64,26 @@ public class FlightDTOFixture {
         );
     }
 
-
+    public static FlightReservationDTO bookInput() {
+        return new FlightReservationDTO(
+                "test@test.com.co",
+                new FlightBookingDTO(
+                        oneFlight().getDateFrom(),
+                        oneFlight().getDateTo(),
+                        oneFlight().getOrigin(),
+                        oneFlight().getDestination(),
+                        oneFlight().getFlightNumber(),
+                        2,
+                        oneFlight().getSeatType(),
+                        PeopleFixture.getTwoPeople(),
+                        new PaymentMethodDTO(
+                                "CREDIT",
+                                "000-000-000",
+                                3
+                        )
+                )
+        );
+    }
 
 
 }
