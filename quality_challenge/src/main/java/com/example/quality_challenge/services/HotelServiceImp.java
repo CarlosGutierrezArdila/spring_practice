@@ -41,6 +41,7 @@ public class HotelServiceImp implements HotelService{
     public BookedHotelDTO bookHotel(HotelReservationDTO bookingRequest) {
         HotelBookingDTO booking = bookingRequest.getBooking();
         HotelDTO hotel = hotelRepository.getHotelByID(booking.getHotelCode(), booking.getDestination());
+        hotel.setReserved(true);
         return new BookedHotelDTO(
                 bookingRequest.getUserName(),
                 calculatePrice(hotel, booking.getPeopleAmount()),
